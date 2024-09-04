@@ -1,29 +1,53 @@
-import {
-    Text,
-    View,
-    SafeAreaView,
-    ScrollView,
-    Image,
-} from "react-native";
+import { Text, View, SafeAreaView, ScrollView, Image, Alert } from "react-native";
 import { useState } from "react";
 import { images } from "@/constants";
 import CustomFormField from "@/components/CustomFormField";
 import { StatusBar } from "expo-status-bar";
 import CustomButton from "@/components/CustomButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import { createUser } from "../../lib/appwrite";
 
 const SignUp = () => {
     const [form, setForm] = useState({
         email: "",
         password: "",
-        userName: ""
+        userName: "",
     });
     const [submitLoading, setSubmitLoading] = useState(false);
+
+    const submitFn = async () => {
+        console.log("SUBMIT FUCNTION CALLED");
+
+        if (!form.email || !form.password || !form.userName) {
+            Alert.alert("Please fill all  fields")
+            return;
+        }
+
+        setSubmitLoading(true);
+
+        try {
+
+
+            await createUser({
+                email: form.email,
+                name: form.userName,
+                password: form.password,
+            });
+
+            //TODO:GET RESULT AND SAVE IT GLOBALY
+            router.replace('/home')
+        } catch (err) {
+            console.error(err, "ERROR SUBMITING");
+        }
+
+        setSubmitLoading(false);
+
+    };
 
     return (
         <SafeAreaView className="bg-primary h-full">
             <ScrollView>
-                <View className="w-full justify-center h-[85vh] px-4 my-6">
+                <View className="w-full justify-center min-h-[85vh] px-4 my-6">
                     <Image
                         source={images.logo}
                         resizeMode="contain"
@@ -56,7 +80,6 @@ const SignUp = () => {
                     <CustomFormField
                         title="Password"
                         placeholder="Enter your password"
-
                         value={form.password}
                         handleOnChange={(value) => {
                             setForm({ ...form, password: value });
@@ -64,21 +87,22 @@ const SignUp = () => {
                         otherStyles="mt-5"
                     />
 
-
                     <CustomButton
                         containerStyle="mt-10"
-                        handlePress={() => {
-
-                            console.log("Sign Up Clicked")
-                        }}
+                        handlePress={submitFn}
                         isLoading={submitLoading}
-                        title="Sign In"
+                        title="Sign Up"
                         textStyle=""
                     />
 
                     <View className="flex flex-row justify-center pt-4 px-4">
-                        <Text className="text-white font-plight">Already have an account?</Text>
-                        <Link href="/sign-in" className="text-secondary font-psemibold">  Sign In</Link>
+                        <Text className="text-white font-plight">
+                            Already have an account?
+                        </Text>
+                        <Link href="/sign-in" className="text-secondary font-psemibold">
+                            {" "}
+                            Sign In
+                        </Link>
                     </View>
                 </View>
             </ScrollView>
@@ -87,4 +111,4 @@ const SignUp = () => {
     );
 };
 
-export default SignUp
+export default SignUp;
