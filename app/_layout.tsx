@@ -46,7 +46,9 @@ export default function RootLayout() {
 
       } />
       <Stack.Screen name="(auth)" options={{
-        headerShown: false
+        headerShown: false,
+        animation: "slide_from_right",
+        animationDuration: 100
       }
 
       } />
