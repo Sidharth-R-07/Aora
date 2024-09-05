@@ -7,14 +7,20 @@ import {
     Button,
 } from "react-native";
 import { Redirect, router } from "expo-router";
-
-import { images } from "@/constants";
-import CustomButton from "@/components/CustomButton";
+import { images } from "../constants";
+import CustomButton from "../components/CustomButton";
 import { StatusBar } from "expo-status-bar";
+import Toast from "react-native-toast-message";
+import { useGlobalContext } from "../context/GlobalContext";
 
 const index = () => {
+    const { isLoading, isLoggedIn } = useGlobalContext();
+    if (!isLoading && isLoggedIn) {
+        return <Redirect href="/home" />
+    }
     return (
         <SafeAreaView className="bg-primary h-full">
+            <Toast />
             <ScrollView
                 contentContainerStyle={{
                     height: "100%",
@@ -61,8 +67,7 @@ const index = () => {
                     <CustomButton
                         containerStyle="w-full mt-8"
                         handlePress={() => {
-
-                            router.push("./sign-in")
+                            router.push("./sign-in");
                         }}
                         isLoading={false}
                         textStyle=""
@@ -72,7 +77,6 @@ const index = () => {
             </ScrollView>
 
             <StatusBar backgroundColor="#161622" style="light" />
-
         </SafeAreaView>
     );
 };

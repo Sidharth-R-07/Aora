@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-
 import { useFonts } from "expo-font";
-
-
 import { SplashScreen, Stack } from "expo-router";
+
+import GlobalProvider from "../context/GlobalContext";
+
 
 
 SplashScreen.preventAutoHideAsync();
@@ -36,25 +36,26 @@ export default function RootLayout() {
   if (!fontsLoaded && !error) {
     return null;
   }
-
-
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{
-        headerShown: false
-      }} />
+    <GlobalProvider>
+      <Stack>
+        <Stack.Screen name="index" options={{
+          headerShown: false
+        }} />
 
-      <Stack.Screen name="(auth)" options={{
-        headerShown: false,
-        animation: "slide_from_right",
-        animationDuration: 100
-      }} />
+        <Stack.Screen name="(auth)" options={{
+          headerShown: false,
+          animation: "slide_from_right",
+          animationDuration: 100
+        }} />
 
-      <Stack.Screen name="(tabs)" options={{
-        headerShown: false,
-        animation: "slide_from_right",
-        animationDuration: 100
-      }} />
-    </Stack>
+        <Stack.Screen name="(tabs)" options={{
+          headerShown: false,
+          animation: "slide_from_right",
+          animationDuration: 100
+        }} />
+      </Stack>
+    </GlobalProvider>
+
   );
 }

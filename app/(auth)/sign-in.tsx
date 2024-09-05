@@ -12,7 +12,11 @@ import CustomFormField from "@/components/CustomFormField";
 import { StatusBar } from "expo-status-bar";
 import CustomButton from "@/components/CustomButton";
 import { Link, router } from "expo-router";
-import { signInUser } from "../../lib/appwrite";
+import { signInUser, getCurrentUser } from "../../lib/appwrite";
+
+import { useGlobalContext } from "@/context/GlobalContext";
+import Toast from "react-native-toast-message";
+import { successToast, errorToast } from "@/components/CustomToast";
 
 const SignIn = () => {
     const [form, setForm] = useState({
@@ -20,37 +24,52 @@ const SignIn = () => {
         password: "",
     });
     const [submitLoading, setSubmitLoading] = useState(false);
-
-
     const submitFn = async () => {
         console.log("SUBMIT FUCNTION CALLED");
 
+        const { setIsLoggedIn, setUser } = useGlobalContext();
+
         if (!form.email || !form.password) {
-            Alert.alert("Please fill all  fields")
+            Alert.alert("Please fill all  fields");
             return;
         }
 
         setSubmitLoading(true);
 
         try {
-
-
             await signInUser({
                 email: form.email,
                 password: form.password,
             });
-            //TODO:GET RESULT AND SAVE IT GLOBALY
-            // router.replace('/home')//TODO:UN COMMAND THIS LINE
+
+            getCurrentUser()
+                .then((user) => {
+                    if (user) {
+                        setIsLoggedIn(true);
+                        setUser(user);
+                        successToast("Signed In Successfully!");
+                        router.replace("/home");
+                    } else {
+                        setIsLoggedIn(false);
+                        setUser(null);
+                        errorToast("No user found!");
+                    }
+                })
+                .catch((error) => {
+                    errorToast(error);
+                })
+                .finally(() => {
+                    setSubmitLoading(false);
+                });
         } catch (err) {
             console.error(err, "ERROR SUBMITING");
         }
-
         setSubmitLoading(false);
-
     };
 
     return (
         <SafeAreaView className="bg-primary h-full">
+            <Toast />
             <ScrollView>
                 <View className="w-full justify-center h-[85vh] px-4 my-6">
                     <Image
@@ -75,7 +94,6 @@ const SignIn = () => {
                     <CustomFormField
                         title="Password"
                         placeholder="Enter your password"
-
                         value={form.password}
                         handleOnChange={(value) => {
                             setForm({ ...form, password: value });
@@ -96,8 +114,13 @@ const SignIn = () => {
                     />
 
                     <View className="flex flex-row justify-center pt-4 px-4">
-                        <Text className="text-white font-plight">Don't have an account?</Text>
-                        <Link href="/sign-up" className="text-secondary font-psemibold">  Sign Up</Link>
+                        <Text className="text-white font-plight">
+                            Don't have an account?
+                        </Text>
+                        <Link href="/sign-up" className="text-secondary font-psemibold">
+                            {" "}
+                            Sign Up
+                        </Link>
                     </View>
                 </View>
             </ScrollView>
@@ -107,4 +130,3 @@ const SignIn = () => {
 };
 
 export default SignIn;
-

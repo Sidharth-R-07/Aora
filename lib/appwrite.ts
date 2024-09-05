@@ -1,5 +1,12 @@
 import React from "react";
-import { Client, Account, ID, Avatars, Databases } from "react-native-appwrite";
+import {
+  Client,
+  Account,
+  ID,
+  Avatars,
+  Databases,
+  Query,
+} from "react-native-appwrite";
 
 export const appwriteconfig = {
   endpoint: "https://cloud.appwrite.io/v1",
@@ -20,9 +27,7 @@ client
   .setPlatform(appwriteconfig.platform); // YOUR application ID
 
 const account = new Account(client);
-
 const avatars = new Avatars(client);
-
 const database = new Databases(client);
 
 // CREATE NEW USER ACCOUNT
@@ -33,13 +38,13 @@ export const createUser = async ({
 }: CreateUserProps): Promise<void> => {
   try {
     const newAccount = await account.create(ID.unique(), email, password, name);
-    console.log(newAccount);
 
     if (!newAccount) throw new Error();
 
+    console.log("User created:", newAccount.$id);
     const avaterUrl = avatars.getInitials(name);
 
-    const newUser = await signInUser({
+    await signInUser({
       email: email,
       password: password,
     });
@@ -52,7 +57,7 @@ export const createUser = async ({
         email: email,
         username: name,
         avatar: avaterUrl,
-        accountid: "123",
+        accountid: newAccount.$id,
       }
     );
   } catch (error) {
@@ -62,7 +67,6 @@ export const createUser = async ({
 };
 
 // SIGN IN USER
-
 export const signInUser = async ({
   email,
   password,
@@ -70,10 +74,63 @@ export const signInUser = async ({
   try {
     const section = await account.createEmailPasswordSession(email, password);
     console.log("User signed in successfully");
-    console.log(section);
+
+    const user = await getCurrentUser();
   } catch (error) {
     console.log(error, "ERROR IN SIGN IN USER:");
     throw error;
+  }
+};
+
+//GET CURRENT USER
+export const getCurrentUser = async () => {
+  try {
+    const currentAccount = await account.get();
+    if (!currentAccount) throw new Error();
+    const currentUser = await database.listDocuments(
+      appwriteconfig.databaseId,
+      appwriteconfig.userCollectionId,
+      [Query.equal("accountid", currentAccount.$id)]
+    );
+    if (!currentUser) throw new Error();
+
+    const user: UserModel = {
+      accountid: currentUser.documents[0].$id,
+      email: currentUser.documents[0].email,
+      username: currentUser.documents[0].username,
+      avatar: currentUser.documents[0].avatar,
+    };
+
+    return user;
+  } catch (error) {
+    console.error("ERROR IN GET CURRENT USER:", error);
+    throw error;
+  }
+};
+
+//FETCH ALL POSTS
+export const fetchAllPosts = async (): Promise<PostModel[]> => {
+  try {
+    const postsdocments = await database.listDocuments(
+      appwriteconfig.databaseId,
+      appwriteconfig.videosCollectionId
+    );
+    if (!postsdocments) return [];
+
+    const posts: PostModel[] = postsdocments.documents.map((post) => {
+      return {
+        id: post.$id,
+        title: post.title,
+        content: post.promot,
+        video: post.video,
+        thumbnail: post.thumbline,
+      };
+    });
+
+    return posts;
+  } catch (error) {
+    console.error("ERROR IN FETCH ALL POSTS:", error);
+    return [];
   }
 };
 
@@ -86,4 +143,19 @@ interface CreateUserProps {
   email: string;
   password: string;
   name: string;
+}
+
+export interface UserModel {
+  email: string;
+  username: string;
+  avatar: string;
+  accountid: string;
+}
+
+export interface PostModel {
+  id: string;
+  title: string;
+  content: string;
+  video: string;
+  thumbnail: string;
 }
