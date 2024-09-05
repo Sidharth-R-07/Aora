@@ -31,7 +31,7 @@ const Home = () => {
         <SafeAreaView className="bg-primary h-full">
             <FlatList
                 data={posts}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.id ?? ''}
                 renderItem={(item) => {
                     return (
                         <PostFrame content={item.item.content} id={item.item.id} thumbnail={item.item.thumbnail} title={item.item.title} video={item.item.video} />
@@ -62,7 +62,7 @@ const Home = () => {
                                 value=""
                             />
 
-                            <TrendingPosts posts={[]} />
+                            <TrendingPosts />
                         </View>
                     );
                 }}

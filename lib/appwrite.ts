@@ -134,6 +134,33 @@ export const fetchAllPosts = async (): Promise<PostModel[]> => {
   }
 };
 
+//FETCH LATEST POSTS
+export const fetchLaTESTPosts = async (): Promise<PostModel[]> => {
+  try {
+    const postsdocments = await database.listDocuments(
+      appwriteconfig.databaseId,
+      appwriteconfig.videosCollectionId,
+      [Query.orderDesc("$createdAt"), Query.limit(4)]
+    );
+    if (!postsdocments) return [];
+
+    const posts: PostModel[] = postsdocments.documents.map((post) => {
+      return {
+        id: post.$id,
+        title: post.title,
+        content: post.promot,
+        video: post.video,
+        thumbnail: post.thumbline,
+      };
+    });
+
+    return posts;
+  } catch (error) {
+    console.error("ERROR IN FETCH ALL POSTS:", error);
+    return [];
+  }
+};
+
 interface SignInProps {
   email: string;
   password: string;
@@ -153,9 +180,9 @@ export interface UserModel {
 }
 
 export interface PostModel {
-  id: string;
-  title: string;
-  content: string;
+  id?: string;
+  title?: string;
+  content?: string;
   video: string;
   thumbnail: string;
 }
