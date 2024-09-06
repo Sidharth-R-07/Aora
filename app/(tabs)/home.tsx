@@ -10,31 +10,34 @@ import {
 import { images } from "../../constants";
 import SearchInput from "@/components/SearchInput";
 import TrendingPosts from "@/components/TrendingPosts";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getAllPosts } from "../../lib/use_appwrite";
-import { fetchAllPosts, PostModel } from "../../lib/appwrite";
 import React from "react";
 import PostFrame from "@/components/PostFrame";
 
-
-
 const Home = () => {
     const [refreshLoading, setRefreshLoading] = useState(false);
-    const { data: posts, fetchLoading, reFreshData } = getAllPosts()
+    const { data: posts, fetchLoading, reFreshData } = getAllPosts();
 
     const handleRefresh = async () => {
         setRefreshLoading(true);
-        await reFreshData();
+        await reFreshData!();
         setRefreshLoading(false);
     };
     return (
         <SafeAreaView className="bg-primary h-full">
             <FlatList
                 data={posts}
-                keyExtractor={(item) => item.id ?? ''}
+                keyExtractor={(item) => item.id ?? ""}
                 renderItem={(item) => {
                     return (
-                        <PostFrame content={item.item.content} id={item.item.id} thumbnail={item.item.thumbnail} title={item.item.title} video={item.item.video} />
+                        <PostFrame
+                            content={item.item.content}
+                            id={item.item.id}
+                            thumbnail={item.item.thumbnail}
+                            title={item.item.title}
+                            video={item.item.video}
+                        />
                     );
                 }}
                 ListHeaderComponent={() => {
@@ -54,14 +57,7 @@ const Home = () => {
                                     resizeMode="contain"
                                 />
                             </View>
-                            <SearchInput
-                                handleOnChange={() => { }}
-                                otherStyles=""
-                                placeholder="Search for a video topic"
-                                title=""
-                                value=""
-                            />
-
+                            <SearchInput inialQuery="" />
                             <TrendingPosts />
                         </View>
                     );

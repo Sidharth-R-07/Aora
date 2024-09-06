@@ -21,7 +21,8 @@
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#161622"
       },
-      "package": "com.aora"
+      "package": "com.aora",
+      "permissions": ["INTERNET"]
     },
     "web": {
       "bundler": "metro",

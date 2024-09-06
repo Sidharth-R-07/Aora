@@ -75,12 +75,10 @@ const TrendingPost: React.FC<TrendingPostProps> = (post) => {
 
                             if (status.isLoaded) {
                                 const playbackStatus = status as AVPlaybackStatusSuccess;
-
                                 if (playbackStatus.didJustFinish && !playbackStatus.isLooping) {
                                     setPlaying(false)
                                 }
                             } else {
-                                // Handle error or loading state
                                 console.error('Video failed to load or is not loaded yet.');
                             }
                         }}

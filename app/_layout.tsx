@@ -54,6 +54,12 @@ export default function RootLayout() {
           animation: "slide_from_right",
           animationDuration: 100
         }} />
+
+        <Stack.Screen name="search/[query]" options={{
+          headerShown: false,
+          animation: "slide_from_right",
+          animationDuration: 100
+        }} />
       </Stack>
     </GlobalProvider>
 

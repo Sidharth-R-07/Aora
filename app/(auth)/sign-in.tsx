@@ -24,15 +24,18 @@ const SignIn = () => {
         password: "",
     });
     const [submitLoading, setSubmitLoading] = useState(false);
-    const submitFn = async () => {
-        console.log("SUBMIT FUCNTION CALLED");
+    const { setIsLoggedIn, setUser } = useGlobalContext();
 
-        const { setIsLoggedIn, setUser } = useGlobalContext();
+
+    const submitFn = async () => {
+        console.log("SUBMIT FUCNTION CALLED 11");
+
 
         if (!form.email || !form.password) {
             Alert.alert("Please fill all  fields");
             return;
         }
+        console.log("SUBMIT FUCNTION CALLED 22");
 
         setSubmitLoading(true);
 
@@ -41,6 +44,7 @@ const SignIn = () => {
                 email: form.email,
                 password: form.password,
             });
+
 
             getCurrentUser()
                 .then((user) => {
@@ -62,6 +66,7 @@ const SignIn = () => {
                     setSubmitLoading(false);
                 });
         } catch (err) {
+            errorToast("Something went wrong. Please try again");
             console.error(err, "ERROR SUBMITING");
         }
         setSubmitLoading(false);
