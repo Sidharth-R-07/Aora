@@ -25,7 +25,7 @@ const CustomFormField: React.FC<FormFieldProps> = ({
             <Text className=" text-sm text-gray-100 font-pmedium">{title}</Text>
             <View className="border flex flex-row  border-black-200 w-full h-14 bg-black-100 rounded-lg focus:border-secondary items-center">
                 <TextInput
-                    className="flex-1 w-full px-2 text-white font-psemibold  text-base"
+                    className="flex-1 w-full px-2 text-white font-pregular  text-base"
                     placeholder={placeholder}
                     value={value}
                     placeholderTextColor="#7b7b8b"

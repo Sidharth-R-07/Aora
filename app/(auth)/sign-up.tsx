@@ -6,6 +6,11 @@ import { StatusBar } from "expo-status-bar";
 import CustomButton from "@/components/CustomButton";
 import { Link, router } from "expo-router";
 import { createUser } from "../../lib/appwrite";
+import Toast from "react-native-toast-message";
+
+
+
+import { successToast, errorToast } from "@/components/CustomToast";
 
 const SignUp = () => {
     const [form, setForm] = useState({
@@ -19,7 +24,7 @@ const SignUp = () => {
         console.log("SUBMIT FUCNTION CALLED");
 
         if (!form.email || !form.password || !form.userName) {
-            Alert.alert("Please fill all  fields")
+            errorToast("Please fill all  fields")
             return;
         }
 
@@ -34,9 +39,10 @@ const SignUp = () => {
                 password: form.password,
             });
 
-            //TODO:GET RESULT AND SAVE IT GLOBALY
+            successToast("User created successfully");
             router.replace('/home')
         } catch (err) {
+            errorToast(`Error creating user:${err}`)
             console.error(err, "ERROR SUBMITING");
         }
 
@@ -46,6 +52,7 @@ const SignUp = () => {
 
     return (
         <SafeAreaView className="bg-primary h-full">
+            <Toast position="bottom" />
             <ScrollView>
                 <View className="w-full justify-center min-h-[85vh] px-4 my-6">
                     <Image

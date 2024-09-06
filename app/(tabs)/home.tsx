@@ -15,9 +15,12 @@ import { getAllPosts } from "../../lib/use_appwrite";
 import React from "react";
 import PostFrame from "@/components/PostFrame";
 
+import { useGlobalContext } from "@/context/GlobalContext";
+
 const Home = () => {
     const [refreshLoading, setRefreshLoading] = useState(false);
     const { data: posts, fetchLoading, reFreshData } = getAllPosts();
+    const { user } = useGlobalContext()
 
     const handleRefresh = async () => {
         setRefreshLoading(true);
@@ -37,6 +40,8 @@ const Home = () => {
                             thumbnail={item.item.thumbnail}
                             title={item.item.title}
                             video={item.item.video}
+                            user={item.item.user}
+
                         />
                     );
                 }}
@@ -47,7 +52,7 @@ const Home = () => {
                                 <View className="">
                                     <Text className="text-gray-100 text-base">Welcome Back</Text>
                                     <Text className="text-gray-50 text-xl font-psemibold">
-                                        Sidharth
+                                        {user?.username}
                                     </Text>
                                 </View>
 

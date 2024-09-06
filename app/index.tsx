@@ -4,7 +4,7 @@ import {
     View,
     SafeAreaView,
     Image,
-    Button,
+
 } from "react-native";
 import { Redirect, router } from "expo-router";
 import { images } from "../constants";
@@ -20,7 +20,7 @@ const index = () => {
     }
     return (
         <SafeAreaView className="bg-primary h-full">
-            <Toast />
+            <Toast position="bottom" />
             <ScrollView
                 contentContainerStyle={{
                     height: "100%",

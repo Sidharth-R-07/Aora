@@ -26,17 +26,11 @@ const SignIn = () => {
     const [submitLoading, setSubmitLoading] = useState(false);
     const { setIsLoggedIn, setUser } = useGlobalContext();
 
-
     const submitFn = async () => {
-        console.log("SUBMIT FUCNTION CALLED 11");
-
-
         if (!form.email || !form.password) {
-            Alert.alert("Please fill all  fields");
+            errorToast("Please fill all required fields");
             return;
         }
-        console.log("SUBMIT FUCNTION CALLED 22");
-
         setSubmitLoading(true);
 
         try {
@@ -44,7 +38,6 @@ const SignIn = () => {
                 email: form.email,
                 password: form.password,
             });
-
 
             getCurrentUser()
                 .then((user) => {
@@ -66,7 +59,7 @@ const SignIn = () => {
                     setSubmitLoading(false);
                 });
         } catch (err) {
-            errorToast("Something went wrong. Please try again");
+            errorToast("Please check the email and password!");
             console.error(err, "ERROR SUBMITING");
         }
         setSubmitLoading(false);
@@ -74,7 +67,7 @@ const SignIn = () => {
 
     return (
         <SafeAreaView className="bg-primary h-full">
-            <Toast />
+            <Toast position="bottom" />
             <ScrollView>
                 <View className="w-full justify-center h-[85vh] px-4 my-6">
                     <Image
@@ -106,9 +99,9 @@ const SignIn = () => {
                         otherStyles="mt-5"
                     />
 
-                    <View className="flex items-end px-1">
+                    {/* <View className="flex items-end px-1">
                         <Text className="mt-4 text-white">Forgot Password?</Text>
-                    </View>
+                    </View> */}
 
                     <CustomButton
                         containerStyle="mt-10"

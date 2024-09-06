@@ -6,12 +6,16 @@ import {
     View,
     Image,
     TouchableOpacity,
+    Alert
 } from "react-native";
 import { icons } from "@/constants";
 import { getUserPosts } from "../../lib/use_appwrite";
 
+import { logoutUser } from "@/lib/appwrite";
+
 import PostFrame from "@/components/PostFrame";
 import { useGlobalContext } from "@/context/GlobalContext";
+import { router } from "expo-router";
 
 const Profile = () => {
     const { user, setUser, setIsLoggedIn } = useGlobalContext();
@@ -20,6 +24,33 @@ const Profile = () => {
         fetchLoading,
         reFreshData,
     } = getUserPosts(`${user?.accountid}`);
+
+
+    const showLogoutDilogue = () => {
+
+        Alert.alert(
+            "Logout",
+            "Are you sure you want to log out?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel",
+                },
+                {
+                    text: "Logout",
+
+                    onPress: async () => {
+
+                        await logoutUser();
+                        setIsLoggedIn(false);
+                        setUser(null);
+                        router.replace("/sign-in")
+                    },
+                },
+            ],
+            { cancelable: true, }
+        );
+    }
 
     return (
         <SafeAreaView className="bg-primary h-full">
@@ -34,6 +65,7 @@ const Profile = () => {
                             thumbnail={item.item.thumbnail}
                             title={item.item.title}
                             video={item.item.video}
+                            user={item.item.user}
                         />
                     );
                 }}
@@ -43,7 +75,11 @@ const Profile = () => {
 
                             <TouchableOpacity
                                 activeOpacity={0.7}
-                                className="w-full items-end pr-2">
+                                className="w-full items-end pr-2"
+
+                                onPress={showLogoutDilogue}
+
+                            >
                                 <Image
                                     source={icons.logout}
                                     resizeMode="contain"
@@ -69,7 +105,7 @@ const Profile = () => {
                             <View className="flex-row gap-6">
                                 <View className="items-center">
                                     <Text className="text-white font-psemibold text-2xl pl-3 mt-3">
-                                        12
+                                        {posts.length}
                                     </Text>
                                     <Text className="text-white font-pregular text-sm pl-3">
                                         Posts

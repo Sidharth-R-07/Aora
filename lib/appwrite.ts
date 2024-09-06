@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Client,
   Account,
@@ -124,6 +123,7 @@ export const fetchAllPosts = async (): Promise<PostModel[]> => {
         content: post.promot,
         video: post.video,
         thumbnail: post.thumbline,
+        user: post.users,
       };
     });
 
@@ -151,6 +151,7 @@ export const fetchLaTESTPosts = async (): Promise<PostModel[]> => {
         content: post.promot,
         video: post.video,
         thumbnail: post.thumbline,
+        user: post.users,
       };
     });
 
@@ -178,6 +179,7 @@ export const fetchSearchPosts = async (query: string): Promise<PostModel[]> => {
         content: post.promot,
         video: post.video,
         thumbnail: post.thumbline,
+        user: post.users,
       };
     });
 
@@ -205,6 +207,7 @@ export const fetchUserPosts = async (userId: string): Promise<PostModel[]> => {
         content: post.promot,
         video: post.video,
         thumbnail: post.thumbline,
+        user: post.users,
       };
     });
 
@@ -212,6 +215,19 @@ export const fetchUserPosts = async (userId: string): Promise<PostModel[]> => {
   } catch (error) {
     console.error("ERROR IN FETCH ALL POSTS:", error);
     return [];
+  }
+};
+
+//LOGOUT USER
+
+export const logoutUser = async () => {
+  try {
+    const section = await account.deleteSession("current");
+
+    return section;
+  } catch (error) {
+    console.error("ERROR IN LOGOUT USER:", error);
+    throw error;
   }
 };
 
@@ -239,4 +255,5 @@ export interface PostModel {
   content?: string;
   video: string;
   thumbnail: string;
+  user: UserModel;
 }

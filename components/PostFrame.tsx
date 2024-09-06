@@ -13,7 +13,7 @@ const PostFrame: React.FC<PostModel> = (post) => {
                     <View className="border-secondary border rounded-md">
                         <Image
                             source={{
-                                uri: post.thumbnail,
+                                uri: post.user.avatar,
                             }}
                             className="   w-11 h-11 rounded-md"
                             resizeMode="cover"
@@ -24,7 +24,7 @@ const PostFrame: React.FC<PostModel> = (post) => {
                             {post.title}
                         </Text>
                         <Text className="text-white font-plight text-xs pl-3">
-                            Brand Etter
+                            {post.user.username}
                         </Text>
                     </View>
                 </View>
