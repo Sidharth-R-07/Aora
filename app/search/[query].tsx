@@ -17,6 +17,7 @@ import { useLocalSearchParams } from 'expo-router'
 
 
 
+
 const Search = () => {
     const { query } = useLocalSearchParams()
     const { data: posts, fetchLoading, reFreshData } = getSearchPosts(`${query}`)

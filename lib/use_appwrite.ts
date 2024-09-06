@@ -4,6 +4,7 @@ import {
   PostModel,
   fetchLaTESTPosts,
   fetchSearchPosts,
+  fetchUserPosts,
 } from "./appwrite";
 
 //GET ALL POSTS
@@ -84,6 +85,31 @@ export const getSearchPosts = (query: string): ReturnModel => {
   return { fetchLoading, data, reFreshData };
 };
 
+//GET USER POSTS
+export const getUserPosts = (userId: string): ReturnModel => {
+  const [fetchLoading, setFetchLoading] = useState(true);
+  const [data, setData] = useState<PostModel[]>([]);
+
+  const fetchData = async () => {
+    setFetchLoading(true);
+    try {
+      const posts = await fetchUserPosts(userId);
+      setData(posts);
+    } catch (err) {
+      console.error(err);
+    }
+    setFetchLoading(false);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const reFreshData = async (): Promise<void> => {
+    fetchData();
+  };
+
+  return { fetchLoading, data, reFreshData };
+};
 interface ReturnModel {
   fetchLoading: boolean;
   data: PostModel[];
