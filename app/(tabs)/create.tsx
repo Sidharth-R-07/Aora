@@ -37,7 +37,7 @@ const Create = () => {
                 </View>
                 <View>
                     <Text className="text-sm text-gray-100 font-pmedium">
-                        Thumbbnail Image
+                        Thumbnail Image
                     </Text>
                     <TouchableOpacity
                         className="h-14 bg-black-100 my-3 rounded-lg items-center justify-center"
@@ -70,3 +70,5 @@ const Create = () => {
 }
 
 export default Create
+
+

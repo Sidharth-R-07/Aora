@@ -14,6 +14,7 @@ export const appwriteconfig = {
   databaseId: "66d868f7000ad8d9f182",
   userCollectionId: "66d86929001e87417887",
   videosCollectionId: "66d86960001e37d69274",
+  postsCollectionId: "66dbc4ae00070dfe37c3",
   storageId: "66d86bf60005322ab4d4",
 };
 
@@ -253,7 +254,6 @@ export interface PostModel {
   id?: string;
   title?: string;
   content?: string;
-  video: string;
   thumbnail: string;
   user: UserModel;
 }
