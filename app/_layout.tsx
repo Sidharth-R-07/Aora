@@ -40,7 +40,15 @@ export default function RootLayout() {
     <GlobalProvider>
       <Stack>
         <Stack.Screen name="index" options={{
-          headerShown: false
+          headerShown: false,
+          animation: "slide_from_right",
+          animationDuration: 100
+        }} />
+
+        <Stack.Screen name="onbording/on-bording" options={{
+          headerShown: false,
+          animation: "slide_from_right",
+          animationDuration: 100
         }} />
 
         <Stack.Screen name="(auth)" options={{
@@ -60,6 +68,8 @@ export default function RootLayout() {
           animation: "slide_from_right",
           animationDuration: 100
         }} />
+
+
       </Stack>
     </GlobalProvider>
 

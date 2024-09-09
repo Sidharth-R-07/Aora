@@ -37,6 +37,7 @@ export const createUser = async ({
   name,
 }: CreateUserProps): Promise<void> => {
   try {
+    logoutUser();
     const newAccount = await account.create(ID.unique(), email, password, name);
 
     if (!newAccount) throw new Error();
@@ -72,9 +73,9 @@ export const signInUser = async ({
   password,
 }: SignInProps): Promise<void> => {
   try {
+    logoutUser();
     const section = await account.createEmailPasswordSession(email, password);
     console.log("User signed in successfully");
-
     const user = await getCurrentUser();
   } catch (error) {
     console.log(error, "ERROR IN SIGN IN USER:");
